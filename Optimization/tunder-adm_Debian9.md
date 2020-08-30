@@ -1,4 +1,4 @@
-Of course you can use tuned for Debian 9!
+
 
 Simply do the following.
 
