@@ -13,28 +13,28 @@ OS:
 Open your server console and follow the instructions.
 
     Install important compilation packages.
-    PHP Code:
+    >
     apt install fakeroot ca-certificates build-essential bison flex gnupg libncurses-dev libelf-dev libssl-dev wget bc rsync 
 
-    PHP Code:
+    >
     gpg --locate-keys torvalds@kernel.org gregkh@kernel.org 
 
-    PHP Code:
+    >
     mkdir ~/kernel
     cd ~/kernel 
     Download the latest kernel from: https://www.kernel.org/ (yellow button or stable -> tarball)
-    PHP Code:
+    >
     wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.7.tar.xz
     wget https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.7.tar.sign 
     Unpack the package. If package verification fails, remove (| gpg --verify linux-5.4.7.tar.sign -).
-    PHP Code:
+    >
     unxz -c linux-5.4.7.tar.xz | gpg --verify linux-5.4.7.tar.sign -
     cd linux-5.4.7 
     We're going to set up your kernel.
-    PHP Code:
+    >
     make menuconfig 
     Now set according to the settings tree.
-    PHP Code:
+    >
     Processor type and features
     [*] CPU Frequency scaling
          Timer frequency (xxx Hz) ---> 1 000 Hz
@@ -51,17 +51,17 @@ Open your server console and follow the instructions.
         []   'schedutil' cpufreq governor 
     Save everything and exit.
     Check the following settings in .config and save.
-    PHP Code:
+    >
     nano .config
     CONFIG_SYSTEM_TRUSTED_KEYS = ""
     CONFIG_DEBUG_INFO=n 
     You can use your own name instead of fastkernel.
-    PHP Code:
+    >
     make clean
     make deb-pkg LOCALVERSION=-fastkernel 
     The kernel is compiling. Hard work. Here you have some bacon as a reward. (Now you have about 2 hours of free time ~ depends on processor performance).
     We have a compiled kernel. Install the kernel.
-    PHP Code:
+    >
     Install
     =====
     dpkg -i ../linux-image-5.4.7-fastkernel_5.4.7-fastkernel-1_amd64.deb
@@ -70,16 +70,16 @@ Open your server console and follow the instructions.
     =====
     apt-get purge fastkernel_5.4.7 
     Restart the server and enter the command after booting.
-    PHP Code:
+    >
     uname -r
     --> You will get: 5.4.7-fastkernel <-- 
     We turn on the Intel turbo.
-    PHP Code:
+    >
     echo 0 > /sys/devices/system/cpu/intel_pstate/no_turbo 
     Now let's set the CPU's permanent performance to maximum. Create a cpu.sh file somewhere. Modify the settings according to your processor!
-    PHP Code:
+    >
     apt install cpufrequtils //Install this tool, otherwise it will not work. 
-    PHP Code:
+    >
     #!/bin/bash
 
     cpufreq-set --cpu 0 --governor performance
@@ -96,9 +96,9 @@ Open your server console and follow the instructions.
 
     cpufreq-set -r -g performance 
     Now let's set the script to run every time the server restarts. I put the startup script into etc/rc.local (the file does not normally exist). We'll create it.
-    PHP Code:
+    >
     nano /etc/systemd/system/rc-local.service 
-    PHP Code:
+    >
     [Unit]
     Description=/etc/rc.local
     ConditionPathExists=/etc/rc.local
@@ -113,9 +113,9 @@ Open your server console and follow the instructions.
 
     [Install]
     WantedBy=multi-user.target 
-    PHP Code:
+    >
     nano /etc/rc.local 
-    PHP Code:
+    >
     #!/bin/sh -e
     #
     # rc.local
@@ -131,14 +131,14 @@ Open your server console and follow the instructions.
     /cpu.sh || exit 1
 
     exit 0 
-    PHP Code:
+    >
     chmod +x /etc/rc.local
     systemctl enable rc-local
     systemctl start rc-local.service
     systemctl status rc-local.service 
     Restart the server.
     Type the command cpupower frequency-info. You should see something like that.
-    PHP Code:
+    >
     analyzing CPU 0:
       driver: intel_pstate
       CPUs which run at the same hardware frequency: 0
