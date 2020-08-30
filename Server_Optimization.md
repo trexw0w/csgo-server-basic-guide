@@ -1,12 +1,13 @@
 This tutorial has been tested on hardware (dedicated server):
 
-####Intel Core i7-3770 (3.40 GHz / 3.90 GHz)
-####HDD2x HDD SATA 3,0 TB
-####RAM2x RAM 8192 MB DDR3
+*Intel Core i7-3770 (3.40 GHz / 3.90 GHz)
+*HDD2x HDD SATA 3,0 TB
+*RAM2x RAM 8192 MB DDR3
 
+OS
 
-####Debian GNU/Linux 9 (stretch)
-####SMP Debian 4.9.189-3+deb9u2 (2019-11-11) x86_64
+*Debian GNU/Linux 9 (stretch)
+*SMP Debian 4.9.189-3+deb9u2 (2019-11-11) x86_64
 
 
 Open your server console and follow the instructions.
