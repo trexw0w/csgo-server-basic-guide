@@ -2,8 +2,153 @@
 
 ## Before You Begin
 
+## Install SteamCMD
 
-2.  Complete our guide: [Install SteamCMD for a Steam Game Server](/docs/applications/game-servers/install-steamcmd-for-a-steam-game-server). This will get SteamCMD installed and running on your Linode and this guide will pick up where the SteamCMD page leaves off.
+SteamCMD can be installed via your distribution's [package manager](#from-package-repositories-recommended), or through a [manual method](#install-manually).
+
+### From Package Repositories (Recommended)
+
+Installing via the package manager allows you to more easily download updates and security patches, so we strongly recommend using this method if your distribution includes the SteamCMD package. The package is available for Ubuntu and Debian deployments.
+
+-   **Ubuntu**
+
+    1.  Install the package:
+
+            sudo apt-get install steamcmd
+
+    1.  Create a symlink to the `steamcmd` executable in a convenient place, such as your home directory:
+
+            cd ~
+            ln -s /usr/games/steamcmd steamcmd
+
+-   **Debian**
+
+    1.  Add the `non-free` area to the repositories in your sources list, because the `steamcmd` package is only available from this area. To do so, edit your `/etc/apt/sources.list` file and include `non-free` at the end of each `deb` and `deb-src` line, as in this snippet:
+
+        {{< file "/etc/apt/sources.list" >}}
+deb http://mirrors.linode.com/debian stretch main non-free
+deb-src http://mirrors.linode.com/debian stretch main non-free
+...
+{{< /file >}}
+
+    1.  Add the i386 architecture, update your package list, and install `steamcmd`:
+
+            sudo dpkg --add-architecture i386
+            sudo apt update
+            sudo apt-get install steamcmd
+
+    1.  Create a symlink to the `steamcmd` executable in a convenient place, such as your home directory:
+
+            cd ~
+            ln -s /usr/games/steamcmd steamcmd
+
+### Install Manually
+
+If your package manager does not include the `steamcmd` package, install it manually:
+
+1.  Newly created Linodes use 64-bit Linux operating systems. Since Steam is compiled for i386, install the appropriate libraries. For CentOS, also install `wget`.
+
+    -   **CentOS 7, Fedora**
+
+            sudo yum install glibc.i686 libstdc++.i686 wget
+
+    -   **Debian, Ubuntu**
+
+            sudo apt-get install lib32gcc1
+
+    {{< note >}}
+Running `dpkg --add-architecture i386` is not necessary at this point. Our Steam game guides add [multiarch support](https://wiki.debian.org/Multiarch/HOWTO) only when a game requires it.
+{{< /note >}}
+
+1.  Create the directory for SteamCMD and change to it:
+
+        mkdir ~/Steam && cd ~/Steam
+
+1.  Download the SteamCMD tarball:
+
+        wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz
+
+1.  Extract the installation and runtime files:
+
+        tar -xvzf steamcmd_linux.tar.gz
+
+{{< note >}}
+When running a Steam game, you may encounter the following error:
+
+    /home/steam/.steam/sdk32/libsteam.so: cannot open shared object file: No such file or directory
+
+The game server will still operate despite this error, and it should be something fixed in a later release of SteamCMD. The temporary fix is to create the directory and symlink to `libsteam.so`.
+
+    mkdir -p ~/.steam/sdk32/
+    ln -s ~/Steam/linux32/steamclient.so ~/.steam/sdk32/steamclient.so
+
+{{< /note >}}
+
+## Run SteamCMD
+
+1.  Run the executable in a screen session:
+
+    If you have installed SteamCMD from repositories:
+
+        screen ~/.steam/steamcmd
+
+    If you have installed SteamCMD manually:
+
+        screen ~/Steam/steamcmd.sh
+
+    That will return an output similar to below and leave you at the `Steam>` prompt:
+
+        Redirecting stderr to '/home/steam/Steam/logs/stderr.txt'
+        [  0%] Checking for available updates...
+        [----] Downloading update (0 of 7,013 KB)...
+        [  0%] Downloading update (1,300 of 7,013 KB)...
+        [ 18%] Downloading update (3,412 of 7,013 KB)...
+        [ 48%] Downloading update (5,131 of 7,013 KB)...
+        [ 73%] Downloading update (6,397 of 7,013 KB)...
+        [ 91%] Downloading update (7,013 of 7,013 KB)...
+        [100%] Download complete.
+        [----] Installing update...
+        [----] Extracting package...
+                . . .
+        [----] Cleaning up...
+        [----] Update complete, launching Steam...
+        Redirecting stderr to '/home/steam/Steam/logs/stderr.txt'
+        [  0%] Checking for available updates...
+        [----] Verifying installation...
+        Steam Console Client (c) Valve Corporation
+        -- type 'quit' to exit --
+        Loading Steam API...OK.
+
+        Steam>
+
+1.  Most Steam game servers allow anonymous logins. You can verify this for your title with Valve's list of [dedicated Linux servers](https://developer.valvesoftware.com/wiki/Dedicated_Servers_List#Linux_Dedicated_Servers).
+
+    To log in anonymously:
+
+        login anonymous
+
+    To log in with your Steam username:
+
+        login example_user
+
+    {{< caution >}}
+Some versions of the Steam CLI do **not** obfuscate passwords. If you're signing in with your Steam account, be aware of your local screen's security.
+{{< /caution >}}
+
+## Exit SteamCMD
+
+### Detach from the Screen Session
+
+To exit the screen session which contains the Steam process *without* disrupting the Steam process, enter **Control+A** followed by **Control+D** on your keyboard. You can later return to the screen session by entering:
+
+    screen -r
+
+For more information on managing your screen sessions, review our [Using GNU Screen to Manage Persistent Terminal Sessions](/docs/networking/ssh/using-gnu-screen-to-manage-persistent-terminal-sessions/) guide.
+
+### Stop SteamCMD
+
+To stop the Steam process and remove your screen session, enter `quit` at the `Steam>` command prompt, or enter **Control+C** on your keyboard.
+
 
 {{< note >}}
 This guide is written for a non-root user. Commands that require elevated privileges are prefixed with `sudo`. If you’re not familiar with the `sudo` command, you can check our [Users and Groups](/docs/tools-reference/linux-users-and-groups) guide.
