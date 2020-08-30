@@ -4,7 +4,7 @@
 
 ## Install SteamCMD
 
-SteamCMD can be installed via your distribution's [package manager](#from-package-repositories-recommended), or through a [manual method](#install-manually).
+SteamCMD can be installed via your distribution's [package manager] or through a [manual method].
 
 ### From Package Repositories (Recommended)
 
@@ -25,11 +25,12 @@ Installing via the package manager allows you to more easily download updates an
 
     1.  Add the `non-free` area to the repositories in your sources list, because the `steamcmd` package is only available from this area. To do so, edit your `/etc/apt/sources.list` file and include `non-free` at the end of each `deb` and `deb-src` line, as in this snippet:
 
-        {{< file "/etc/apt/sources.list" >}}
+### file "/etc/apt/sources.list"
+```
 deb http://mirrors.linode.com/debian stretch main non-free
 deb-src http://mirrors.linode.com/debian stretch main non-free
 ...
-{{< /file >}}
+```
 
     1.  Add the i386 architecture, update your package list, and install `steamcmd`:
 
