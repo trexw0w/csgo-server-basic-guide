@@ -1,0 +1,20 @@
+mp_backup_restore_list_files                                       - This command lists backup round files that match the specified prefix. The order they are listed in is most recent to least recent.
+mp_backup_restore_load_autopause "1"                               - This command sets whether or not the game should be automatically paused when a backed up round is restored. Default is 1 (enabled).
+mp_backup_restore_load_file                                        - This command will load the specified backup file and restore the game to the round after the last round saved in the backup file. Data saved includes the current scores, player kills, player deaths and player cash.
+mp_backup_round_auto "1"                                           - This command sets whether or not backups are stored in-memory to handle reconnecting players. Default is 1 (enabled).
+mp_backup_round_file "backup"                                      - This command can be used to set the files prefix.
+mp_backup_round_file_last                                          - This command will print the name of the latest round backup file that was saved.
+mp_backup_round_file_pattern "%prefix%_%date%_%time%_round%round%.txt"           - This command can be used to change the file name format of backup files.
+sv_vote_issue_loadbackup_allowed "1"			                   - This command sets whether or not players can vote to load match from the most recent backup. Default is 1 (enabled).
+
+mp_backup_round_file_pattern arguments 
+
+%prefix% will be replaced with the file prefix
+%date% will be replaced with the date of the backup
+%time% will be replaced with the time of the backup
+%team1% will be replaced with the name of team 1
+%team2% will be replaced with the name of team 2
+%map% will be replaced with the map name
+%round% will be replaced with the round
+%score1% will be replaced with the first team's score
+%score2% will be replaced with the second team's score
